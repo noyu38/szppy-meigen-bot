@@ -1,12 +1,12 @@
 import tweepy
-import api_key as api
+import os
 
 client = tweepy.Client(
-    bearer_token=api.BEARER_TOKEN,
-    consumer_key=api.API_KEY,
-    consumer_secret=api.API_KEY_SECRET,
-    access_token=api.ACCESS_TOKEN,
-    access_token_secret=api.ACCESS_TOKEN_SECRET
+    bearer_token=os.environ.get("BEARER_TOKEN"),
+    consumer_key=os.environ.get("API_KEY"),
+    consumer_secret=os.environ.get("API_KEY_SECRET"),
+    access_token=os.environ.get("ACCESS_TOKEN"),
+    access_token_secret=os.environ.get("ACCESS_TOKEN_SECRET")
 )
 
 try:
