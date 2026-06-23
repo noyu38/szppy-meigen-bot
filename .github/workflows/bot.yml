@@ -1,0 +1,41 @@
+name: Twitter Bot CI
+
+on:
+  schedule:
+    - cron: '*/15 * * * *'
+  workflow_dispatch:
+
+jobs:
+  run-bot:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: 補助チェックアウト
+      uses: actions/checkout@v4
+
+    - name: Pythonのセットアップ
+      uses: actions/setup-python@v5
+      with:
+        python-python: '3.10'
+
+    - name: ライブラリのインストール
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r app/requirements.txt
+
+    - name: Botの実行
+      env:
+        API_KEY: ${{ secrets.API_KEY }}
+        API_KEY_SECRET: ${{ secrets.API_KEY_SECRET }}
+        ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+        ACCESS_TOKEN_SECRET: ${{ secrets.ACCESS_TOKEN_SECRET }}
+        BEARER_TOKEN: ${{ secrets.BEARER_TOKEN }}
+      run: |
+        python app/twitter_bot.py
+
+    - name: 実行結果（last_idなどのテキストファイル）の保存
+      # クラウド上の実行で書き換わったlast_id.txtをリポジトリに自動でコミットして書き戻す
+      uses: stefanzweifel/git-auto-commit-action@v5
+      with:
+        commit_message: "Update bot status [skip ci]"
+        file_pattern: 'txt/*.txt'

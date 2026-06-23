@@ -1,3 +1,5 @@
 api_key.py
 X_developer.txt
 /venv
+*.log
+.vscode
